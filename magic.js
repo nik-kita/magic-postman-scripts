@@ -16,43 +16,12 @@ pm.test(pm.request.name, () => {
   }
   const jData = pm.response.json();
   const rawReqBody = JSON.parse(pm.request.body.raw || "{}");
-  mapping(
-    res_jbody_to_env,
-    jData,
-    "environment",
-    prefix
-  );
-  mapping(
-    res_jbody_to_col,
-    jData,
-    "collectionVariables",
-    prefix
-  );
-  mapping(
-    res_jbody_to_globals,
-    jData,
-    "globals",
-    prefix
-  );
-  mapping(
-    req_jbody_to_env,
-    rawReqBody,
-    "environment",
-    prefix
-  );
-  mapping(
-    req_jbody_to_col,
-    rawReqBody,
-    "collectionVariables",
-    prefix
-  );
-  mapping(
-    req_jbody_to_globals,
-    rawReqBody,
-    "globals",
-    prefix
-  );
-
+  mapping(res_jbody_to_env, jData, "environment", prefix);
+  mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
+  mapping(res_jbody_to_globals, jData, "globals", prefix);
+  mapping(req_jbody_to_env, rawReqBody, "environment", prefix);
+  mapping(req_jbody_to_col, rawReqBody, "collectionVariables", prefix);
+  mapping(req_jbody_to_globals, rawReqBody, "globals", prefix);
 });
 
 function mapping(mapping, source, destination, prefix = "") {
@@ -60,6 +29,6 @@ function mapping(mapping, source, destination, prefix = "") {
   Object.entries(mapping).forEach(([k, path]) => {
     const value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    pm[destination].set(prefix + k, value);
+    value !== undefined && pm[destination].set(prefix + k, value);
   });
 }
