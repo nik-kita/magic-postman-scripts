@@ -18,7 +18,7 @@ pm.test(pm.request.name, () => {
     return;
   }
   const jData = pm.response.json();
-  const rawReqBody = JSON.parse(pm.request.body.raw || "{}");
+  const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
 
   try {
@@ -52,5 +52,5 @@ pm.globals.set(
 
 pm.globals.set(
   "req " + pm.execution.location[1] + pm.execution.location.pop(),
-  pm.request.body.raw || "{}"
+  pm.request.body?.raw || "{}"
 );
