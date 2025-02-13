@@ -4,6 +4,9 @@ pm.test(pm.request.name, () => {
     res_jbody_to_env,
     res_jbody_to_col,
     res_jbody_to_globals,
+    res_data_to_env,
+    res_data_to_col,
+    res_data_to_globals,
     req_jbody_to_env,
     req_jbody_to_col,
     req_jbody_to_globals,
@@ -20,14 +23,18 @@ pm.test(pm.request.name, () => {
   const jData = pm.response.json();
   const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
-
+  const data = pm.response.data;
   try {
     fData = pm.request.body.formdata.toObject();
   } catch {}
+  
 
   mapping(res_jbody_to_env, jData, "environment", prefix);
   mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
   mapping(res_jbody_to_globals, jData, "globals", prefix);
+  mapping(res_data_to_env, data, "environment", prefix);
+  mapping(res_data_to_col, data, "collectionVariables", prefix);
+  mapping(res_data_to_globals, data, "globals", prefix);
   mapping(req_jbody_to_env, rawReqBody, "environment", prefix);
   mapping(req_jbody_to_col, rawReqBody, "collectionVariables", prefix);
   mapping(req_jbody_to_globals, rawReqBody, "globals", prefix);
@@ -44,13 +51,3 @@ function mapping(mapping, source, destination, prefix = "") {
     value !== undefined && pm[destination].set(prefix + k, value);
   });
 }
-
-pm.globals.set(
-  "res " + pm.execution.location[1] + pm.execution.location.pop(),
-  JSON.stringify(pm.response.json(), null, 2)
-);
-
-pm.globals.set(
-  "req " + pm.execution.location[1] + pm.execution.location.pop(),
-  pm.request.body?.raw || "{}"
-);
