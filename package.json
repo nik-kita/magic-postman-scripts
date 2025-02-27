@@ -4,7 +4,8 @@
   "type": "commonjs",
   "main": "./dist/index.js",
   "scripts": {
-    "start": "deno task && deno task start"
+    "start": "deno task && deno task start",
+    "pr": "deno task merge-dev-into-main"
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",
