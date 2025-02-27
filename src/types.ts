@@ -44,6 +44,12 @@ declare global {
       code: number;
       json: Function;
       data?: object;
+      transport: {
+        http?: {
+          statusCode: number;
+          headers: { key: string; value: string }[];
+        };
+      };
     };
     expect: typeof expect;
   };
