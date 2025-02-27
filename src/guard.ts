@@ -1,4 +1,4 @@
-const env_name_like = guard?.env_name_like;
+const env_name_like = magic.guard?.env_name_like;
 const curr = pm.environment.name;
 
 let ok = env_name_like ? false : true;
@@ -15,4 +15,4 @@ if (!ok) {
   throw new Error(`Use with "${env_name_like}"-like named environment!`);
 }
 
-export default guard;
+export default {};
