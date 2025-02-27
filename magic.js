@@ -27,7 +27,6 @@ pm.test(pm.request.name, () => {
   try {
     fData = pm.request.body.formdata.toObject();
   } catch {}
-  
 
   mapping(res_jbody_to_env, jData, "environment", prefix);
   mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
