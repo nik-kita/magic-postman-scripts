@@ -32,7 +32,13 @@ if (pm.info.eventName === "afterResponse") {
   test_after_response();
 }
 function test_after_response() {
-  pm.test(pm.request.name, () => {
+  const {
+    name = pm.request.name,
+    description
+  } = magic;
+  name && console.info(name);
+  description && console.log(description);
+  pm.test(name, () => {
     const {
       res_codes = [200, 201, 202, 203, 204],
       res_jbody_to_env,
