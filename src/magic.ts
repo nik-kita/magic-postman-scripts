@@ -1,3 +1,8 @@
+import * as _types from "./types";
+_types;
+
+export default magic || {};
+
 pm.test(pm.request.name, () => {
   const {
     res_codes = [200, 201, 202, 203, 204],
@@ -16,10 +21,11 @@ pm.test(pm.request.name, () => {
     prefix,
   } = magic;
   const actual_res_code = pm.response.code;
-  if (!res_codes.include(actual_res_code)) {
+  if (!res_codes.includes(actual_res_code)) {
     pm.expect(res_code).to.be.equals(res_code);
     return;
   }
+
   const jData = pm.response.json();
   const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
@@ -42,10 +48,15 @@ pm.test(pm.request.name, () => {
   mapping(req_fbody_to_globals, fData, "globals", prefix);
 });
 
-function mapping(mapping, source, destination, prefix = "") {
+function mapping(
+  mapping: Mapping | undefined,
+  source: any,
+  destination: VarScopeName,
+  prefix = "",
+) {
   if (!mapping) return;
-  Object.entries(mapping).forEach(([k, path]) => {
-    const value = path.reduce((acc, p) => acc[p], source);
+  Object.entries(mapping).forEach(([k, _path]) => {
+    const value = _path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
     value !== undefined && pm[destination].set(prefix + k, value);
   });

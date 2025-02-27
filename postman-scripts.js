@@ -1,3 +1,6 @@
+"use strict";
+
+var magic$1 = magic || {};
 pm.test(pm.request.name, () => {
   const {
     res_codes = [200, 201, 202, 203, 204],
@@ -16,7 +19,7 @@ pm.test(pm.request.name, () => {
     prefix,
   } = magic;
   const actual_res_code = pm.response.code;
-  if (!res_codes.include(actual_res_code)) {
+  if (!res_codes.includes(actual_res_code)) {
     pm.expect(res_code).to.be.equals(res_code);
     return;
   }
@@ -26,8 +29,8 @@ pm.test(pm.request.name, () => {
   const data = pm.response.data;
   try {
     fData = pm.request.body.formdata.toObject();
-  } catch {}
-
+  } catch {
+  }
   mapping(res_jbody_to_env, jData, "environment", prefix);
   mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
   mapping(res_jbody_to_globals, jData, "globals", prefix);
@@ -41,12 +44,13 @@ pm.test(pm.request.name, () => {
   mapping(req_fbody_to_col, fData, "collectionVariables", prefix);
   mapping(req_fbody_to_globals, fData, "globals", prefix);
 });
-
-function mapping(mapping, source, destination, prefix = "") {
-  if (!mapping) return;
-  Object.entries(mapping).forEach(([k, path]) => {
-    const value = path.reduce((acc, p) => acc[p], source);
+function mapping(mapping2, source, destination, prefix = "") {
+  if (!mapping2) return;
+  Object.entries(mapping2).forEach(([k, _path]) => {
+    const value = _path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    value !== undefined && pm[destination].set(prefix + k, value);
+    value !== void 0 && pm[destination].set(prefix + k, value);
   });
 }
+
+console.log(magic$1 || "This script is not running in postman...");
