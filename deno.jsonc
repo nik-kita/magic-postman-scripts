@@ -1,0 +1,30 @@
+{
+  "nodeModulesDir": "manual",
+  "tasks": {
+    "clean": {
+      "description": "Remove build artifacts",
+      "command": "rm -fr dist ./postman-scripts.js"
+    },
+    "transpile": {
+      "description": "ts to js",
+      "command": "npx tsc"
+    },
+    "build": {
+      "description": "Build all project codebase into single file",
+      "command": "npx pkgroll"
+    },
+    "format": {
+      "description": "Fix formatting",
+      "command": "deno fmt"
+    },
+    "start": {
+      "description": "Do all required stuff to generate fresh actual version of postman-scripts.js",
+      "dependencies": [
+        "clean",
+        "transpile",
+        "build",
+        "format"
+      ]
+    }
+  }
+}

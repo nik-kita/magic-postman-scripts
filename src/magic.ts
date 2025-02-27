@@ -1,7 +1,6 @@
+import { mapping } from "./lib/mapping";
 import * as _types from "./types";
 _types;
-
-export default magic || {};
 
 pm.test(pm.request.name, () => {
   const {
@@ -9,9 +8,6 @@ pm.test(pm.request.name, () => {
     res_jbody_to_env,
     res_jbody_to_col,
     res_jbody_to_globals,
-    res_data_to_env,
-    res_data_to_col,
-    res_data_to_globals,
     req_jbody_to_env,
     req_jbody_to_col,
     req_jbody_to_globals,
@@ -26,10 +22,22 @@ pm.test(pm.request.name, () => {
     return;
   }
 
-  const jData = pm.response.json();
+  let jData = {};
+
+  try {
+    jData = pm.response.json();
+  } catch (err) {
+    try {
+      jData = pm.response.data || {};
+    } catch (err2) {
+      console.warn(
+        "Unable to parse data as json both from res.json() or res as already json",
+      );
+      jData = {};
+    }
+  }
   const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
-  const data = pm.response.data;
   try {
     fData = pm.request.body.formdata.toObject();
   } catch {}
@@ -37,9 +45,6 @@ pm.test(pm.request.name, () => {
   mapping(res_jbody_to_env, jData, "environment", prefix);
   mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
   mapping(res_jbody_to_globals, jData, "globals", prefix);
-  mapping(res_data_to_env, data, "environment", prefix);
-  mapping(res_data_to_col, data, "collectionVariables", prefix);
-  mapping(res_data_to_globals, data, "globals", prefix);
   mapping(req_jbody_to_env, rawReqBody, "environment", prefix);
   mapping(req_jbody_to_col, rawReqBody, "collectionVariables", prefix);
   mapping(req_jbody_to_globals, rawReqBody, "globals", prefix);
@@ -48,16 +53,4 @@ pm.test(pm.request.name, () => {
   mapping(req_fbody_to_globals, fData, "globals", prefix);
 });
 
-function mapping(
-  mapping: Mapping | undefined,
-  source: any,
-  destination: VarScopeName,
-  prefix = "",
-) {
-  if (!mapping) return;
-  Object.entries(mapping).forEach(([k, _path]) => {
-    const value = _path.reduce((acc, p) => acc[p], source);
-    console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    value !== undefined && pm[destination].set(prefix + k, value);
-  });
-}
+export default magic;
