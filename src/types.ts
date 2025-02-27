@@ -30,6 +30,9 @@ declare global {
     environment: {
       name: string;
     };
+    info: {
+      eventName: "beforeQuery" | "afterResponse";
+    };
     test: Function;
     request: {
       name: string;
