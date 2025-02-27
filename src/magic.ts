@@ -1,6 +1,8 @@
-"use strict";
+import * as _types from "./types";
+_types;
 
-var magic$1 = magic || {};
+export default magic || {};
+
 pm.test(pm.request.name, () => {
   const {
     res_codes = [200, 201, 202, 203, 204],
@@ -23,14 +25,15 @@ pm.test(pm.request.name, () => {
     pm.expect(res_code).to.be.equals(res_code);
     return;
   }
+
   const jData = pm.response.json();
   const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
   const data = pm.response.data;
   try {
     fData = pm.request.body.formdata.toObject();
-  } catch {
-  }
+  } catch {}
+
   mapping(res_jbody_to_env, jData, "environment", prefix);
   mapping(res_jbody_to_col, jData, "collectionVariables", prefix);
   mapping(res_jbody_to_globals, jData, "globals", prefix);
@@ -44,13 +47,17 @@ pm.test(pm.request.name, () => {
   mapping(req_fbody_to_col, fData, "collectionVariables", prefix);
   mapping(req_fbody_to_globals, fData, "globals", prefix);
 });
-function mapping(mapping2, source, destination, prefix = "") {
-  if (!mapping2) return;
-  Object.entries(mapping2).forEach(([k, _path]) => {
+
+function mapping(
+  mapping: Mapping | undefined,
+  source: any,
+  destination: VarScopeName,
+  prefix = "",
+) {
+  if (!mapping) return;
+  Object.entries(mapping).forEach(([k, _path]) => {
     const value = _path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    value !== void 0 && pm[destination].set(prefix + k, value);
+    value !== undefined && pm[destination].set(prefix + k, value);
   });
 }
-
-console.log(magic$1 || "This script is not running in postman...");

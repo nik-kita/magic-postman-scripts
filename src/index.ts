@@ -1,3 +1,3 @@
-import { hello } from "./hello-world";
+import magic from "./magic";
 
-hello();
+console.log(magic || "This script is not running in postman...");

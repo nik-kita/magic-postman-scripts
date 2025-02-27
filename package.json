@@ -1,12 +1,13 @@
 {
-  "name": "postman-scripts",
-  "version": "0.1.0",
+  "name": "magic-postman-scripts",
+  "version": "1.0.0",
   "type": "commonjs",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "rm -fr dist && npx tsc && npx pkgroll && cp dist/index.js ./postman-scripts.js"
+    "build": "rm -fr dist ./postman-scripts.js && npx tsc && npx pkgroll && cp dist/index.js ./postman-scripts.js"
   },
   "devDependencies": {
+    "pkgroll": "^2.11.2",
     "typescript": "^5.7.3"
   }
 }
