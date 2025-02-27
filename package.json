@@ -1,10 +1,10 @@
 {
   "name": "magic-postman-scripts",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "commonjs",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "rm -fr dist ./postman-scripts.js && npx tsc && npx pkgroll && cp dist/index.js ./postman-scripts.js"
+    "start": "deno task && deno task start start"
   },
   "devDependencies": {
     "pkgroll": "^2.11.2",

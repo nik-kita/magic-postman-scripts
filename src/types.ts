@@ -12,9 +12,6 @@ declare global {
     res_jbody_to_env?: Mapping;
     res_jbody_to_col?: Mapping;
     res_jbody_to_globals?: Mapping;
-    res_data_to_env?: Mapping;
-    res_data_to_col?: Mapping;
-    res_data_to_globals?: Mapping;
     req_jbody_to_env?: Mapping;
     req_jbody_to_col?: Mapping;
     req_jbody_to_globals?: Mapping;

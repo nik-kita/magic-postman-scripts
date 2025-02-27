@@ -1,6 +1,4 @@
-import magic from "./magic";
 import guard from "./guard";
+import magic from "./magic";
 
-!(
-  magic && guard
-) || console.log("This script is not running in postman...");
+!(guard && magic) || console.log("This script is not running in postman...");
