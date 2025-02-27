@@ -14,3 +14,5 @@ if (env_name_like) {
 if (!ok) {
   throw new Error(`Use with "${env_name_like}"-like named environment!`);
 }
+
+export default guard;
