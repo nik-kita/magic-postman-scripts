@@ -16,8 +16,11 @@ pm.test(pm.request.name, () => {
     req_fbody_to_col,
     prefix,
   } = magic;
-  const actual_res_code = pm.response.code;
-  if (!res_codes.includes(actual_res_code)) {
+  const actual_res_code = pm.response.code ||
+    pm.response.transport.http?.statusCode;
+  if (!actual_res_code) {
+    console.warn("Unable to get res status code... Please open the issue");
+  } else if (!res_codes.includes(actual_res_code)) {
     console.warn("Response code is not declared in <magic.res_codes>");
     pm.expect(res_codes).includes(actual_res_code);
     return;
