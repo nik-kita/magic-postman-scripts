@@ -31,14 +31,7 @@ pm.test(pm.request.name, () => {
   try {
     jData = pm.response.json();
   } catch (err) {
-    try {
-      jData = pm.response.data || {};
-    } catch (err2) {
-      console.warn(
-        "Unable to parse data as json both from res.json() or res as already json",
-      );
-      jData = {};
-    }
+    jData = pm.response;
   }
   const rawReqBody = JSON.parse(pm.request.body?.raw || "{}");
   let fData = {};
