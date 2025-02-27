@@ -39,7 +39,8 @@ pm.test(pm.request.name, () => {
   } = magic;
   const actual_res_code = pm.response.code;
   if (!res_codes.includes(actual_res_code)) {
-    pm.expect(res_code).to.be.equals(res_code);
+    console.warn("Response code is not declared in <magic.res_codes>");
+    pm.expect(res_codes).includes(actual_res_code);
     return;
   }
   let jData = {};
