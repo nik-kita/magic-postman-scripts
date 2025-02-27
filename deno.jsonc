@@ -7,22 +7,29 @@
     },
     "transpile": {
       "description": "ts to js",
-      "command": "npx tsc"
+      "command": "npx tsc",
+      "dependencies": [
+        "clean"
+      ]
     },
     "build": {
       "description": "Build all project codebase into single file",
-      "command": "npx pkgroll"
+      "command": "npx pkgroll",
+      "dependencies": [
+        "transpile"
+      ]
     },
     "format": {
       "description": "Fix formatting",
-      "command": "deno fmt"
+      "command": "deno fmt",
+      "dependencies": [
+        "build"
+      ]
     },
     "start": {
       "description": "Do all required stuff to generate fresh actual version of postman-scripts.js",
+      "command": "cp ./dist/index.js ./magic-postman-scripts.js",
       "dependencies": [
-        "clean",
-        "transpile",
-        "build",
         "format"
       ]
     }
