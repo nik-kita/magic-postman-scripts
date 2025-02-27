@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var magic$1 = magic || {};
 pm.test(pm.request.name, () => {
@@ -16,7 +16,7 @@ pm.test(pm.request.name, () => {
     req_fbody_to_env,
     req_fbody_to_globals,
     req_fbody_to_col,
-    prefix
+    prefix,
   } = magic;
   const actual_res_code = pm.response.code;
   if (!res_codes.includes(actual_res_code)) {
@@ -68,4 +68,5 @@ if (!ok) {
 }
 var guard$1 = guard;
 
-!(magic$1 && guard$1) || console.log("This script is not running in postman...");
+!(magic$1 && guard$1) ||
+  console.log("This script is not running in postman...");
