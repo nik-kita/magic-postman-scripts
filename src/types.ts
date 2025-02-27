@@ -10,6 +10,8 @@ declare global {
   /// === custom global variables ===
   const res_code: number;
   const magic: {
+    name?: string;
+    description?: string;
     res_codes: number[];
     res_jbody_to_env?: Mapping;
     res_jbody_to_col?: Mapping;
