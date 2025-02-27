@@ -1,3 +1,5 @@
+import { expect } from "chai";
+
 declare global {
   type Mapping = Record<string, string[]>;
   type VarScopeName = "environment" | "collectionVariables" | "globals";
@@ -43,7 +45,7 @@ declare global {
       json: Function;
       data?: object;
     };
-    expect: Function;
+    expect: typeof expect;
   };
 }
 
