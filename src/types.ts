@@ -23,9 +23,15 @@ declare global {
     req_fbody_to_col?: Mapping;
     prefix?: string;
   };
+  const guard: {
+    env_name_like?: RegExp | RegExp[];
+  };
 
   /// === aka Postman types ===
   const pm: VarScope & {
+    environment: {
+      name: string;
+    };
     test: Function;
     request: {
       name: string;

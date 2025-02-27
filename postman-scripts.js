@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var magic$1 = magic || {};
 pm.test(pm.request.name, () => {
@@ -16,7 +16,7 @@ pm.test(pm.request.name, () => {
     req_fbody_to_env,
     req_fbody_to_globals,
     req_fbody_to_col,
-    prefix,
+    prefix
   } = magic;
   const actual_res_code = pm.response.code;
   if (!res_codes.includes(actual_res_code)) {
@@ -53,4 +53,19 @@ function mapping(mapping2, source, destination, prefix = "") {
   });
 }
 
-console.log(magic$1 || "This script is not running in postman...");
+const env_name_like = guard?.env_name_like;
+const curr = pm.environment.name;
+let ok = env_name_like ? false : true;
+if (env_name_like) {
+  if (Array.isArray(env_name_like)) {
+    ok = env_name_like.some((like) => new RegExp(like).test(curr));
+  } else {
+    ok = new RegExp(env_name_like).test(curr);
+  }
+}
+if (!ok) {
+  throw new Error(`Use with "${env_name_like}"-like named environment!`);
+}
+var guard$1 = guard;
+
+!(magic$1 && guard$1) || console.log("This script is not running in postman...");
