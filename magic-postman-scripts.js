@@ -21,10 +21,16 @@ if (pm.info.eventName === "beforeQuery") {
 
 function mapping(mapping2, source, destination, prefix = "") {
   if (!mapping2) return;
-  Object.entries(mapping2).forEach(([k, _path]) => {
-    const value = _path.reduce((acc, p) => acc[p], source);
+  Object.entries(mapping2).forEach(([k, path]) => {
+    let value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    value !== void 0 && pm[destination].set(prefix + k, value);
+    if (value === void 0) {
+      return;
+    }
+    if (typeof value === "object") {
+      value = JSON.stringify(value);
+    }
+    pm[destination].set(prefix + k, value);
   });
 }
 
