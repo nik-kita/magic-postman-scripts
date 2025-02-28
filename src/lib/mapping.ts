@@ -5,9 +5,16 @@ export function mapping(
   prefix = "",
 ) {
   if (!mapping) return;
-  Object.entries(mapping).forEach(([k, _path]) => {
-    const value = _path.reduce((acc, p) => acc[p], source);
+  Object.entries(mapping).forEach(([k, path]) => {
+    let value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    value !== undefined && pm[destination].set(prefix + k, value);
+    if (value === undefined) {
+      return;
+    }
+    if (typeof value === "object") {
+      value = JSON.stringify(value);
+    }
+
+    pm[destination].set(prefix + k, value);
   });
 }
