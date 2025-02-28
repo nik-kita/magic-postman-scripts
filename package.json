@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",
+    "@types/postman-collection": "^3.5.10",
     "pkgroll": "^2.11.2",
     "typescript": "^5.7.3"
   }
