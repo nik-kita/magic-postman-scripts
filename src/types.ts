@@ -1,11 +1,18 @@
 import { expect } from "chai";
+import { Response } from "postman-collection";
 
 declare global {
-  type Mapping = Record<string, string[]>;
+  type VarConvertType = "string" | "boolean" | "number" | "object" | "array";
+  type Mapping = Record<
+    string,
+    MayBePath
+  >;
+  type MayBePath = string[] | [string[], { type: VarConvertType }];
+  type MayBeOptions = { type: VarConvertType };
   type VarScopeName = "environment" | "collectionVariables" | "globals";
   type VarScope = Record<VarScopeName, {
     get: (name: string) => string | null;
-    set: (name: string, value: string) => void;
+    set: (name: string, value: any, type?: VarConvertType) => void;
   }>;
   /// === custom global variables ===
   const res_code: number;
@@ -45,10 +52,7 @@ declare global {
         };
       };
     };
-    response: {
-      code: number;
-      json: Function;
-      data?: object;
+    response: Response & {
       transport: {
         http?: {
           statusCode: number;
