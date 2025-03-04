@@ -15,9 +15,6 @@ function guard_before_query() {
     throw new Error(`Use with "${env_name_like}"-like named environment!`);
   }
 }
-if (pm.info.eventName === "beforeQuery") {
-  guard_before_query();
-}
 
 function mapping(mapping2, source, destination, prefix = "") {
   if (!mapping2) return;
@@ -25,13 +22,14 @@ function mapping(mapping2, source, destination, prefix = "") {
     const [path, options] = Array.isArray(mayBePath[0]) ? [mayBePath[0], mayBePath[1]] : [mayBePath, null];
     let value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
-    pm[destination].set(prefix + k, value, options?.type || void 0);
+    pm[destination].set(
+      prefix + k,
+      value,
+      options?.type || void 0
+    );
   });
 }
 
-if (pm.info.eventName === "afterResponse") {
-  test_after_response();
-}
 function test_after_response() {
   const {
     name = pm.request.name,
@@ -83,4 +81,10 @@ function test_after_response() {
     mapping(req_fbody_to_col, fData, "collectionVariables", prefix);
     mapping(req_fbody_to_globals, fData, "globals", prefix);
   });
+}
+
+if (pm.info.eventName === "beforeQuery") {
+  guard_before_query();
+} else {
+  test_after_response();
 }

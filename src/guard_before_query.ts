@@ -1,4 +1,4 @@
-function guard_before_query() {
+export function guard_before_query() {
   const env_name_like = magic.guard?.env_name_like;
   const curr = pm.environment.name;
 
@@ -15,8 +15,4 @@ function guard_before_query() {
   if (!ok) {
     throw new Error(`Use with "${env_name_like}"-like named environment!`);
   }
-}
-
-if (pm.info.eventName === "beforeQuery") {
-  guard_before_query();
 }
