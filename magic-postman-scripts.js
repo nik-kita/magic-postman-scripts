@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function guard_before_query() {
   const env_name_like = magic.guard?.env_name_like;
@@ -19,13 +19,15 @@ function guard_before_query() {
 function mapping(mapping2, source, destination, prefix = "") {
   if (!mapping2) return;
   Object.entries(mapping2).forEach(([k, mayBePath]) => {
-    const [path, options] = Array.isArray(mayBePath[0]) ? [mayBePath[0], mayBePath[1]] : [mayBePath, null];
+    const [path, options] = Array.isArray(mayBePath[0])
+      ? [mayBePath[0], mayBePath[1]]
+      : [mayBePath, null];
     let value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
     pm[destination].set(
       prefix + k,
       value,
-      options?.type || void 0
+      options?.type || void 0,
     );
   });
 }
@@ -33,7 +35,7 @@ function mapping(mapping2, source, destination, prefix = "") {
 function test_after_response() {
   const {
     name = pm.request.name,
-    description
+    description,
   } = magic;
   name && console.info(name);
   description && console.log(description);
@@ -49,9 +51,10 @@ function test_after_response() {
       req_fbody_to_env,
       req_fbody_to_globals,
       req_fbody_to_col,
-      prefix
+      prefix,
     } = magic;
-    const actual_res_code = pm.response.code || pm.response.transport.http?.statusCode;
+    const actual_res_code = pm.response.code ||
+      pm.response.transport.http?.statusCode;
     if (!actual_res_code) {
       console.warn("Unable to get res status code... Please open the issue");
     } else if (!res_codes.includes(actual_res_code)) {
