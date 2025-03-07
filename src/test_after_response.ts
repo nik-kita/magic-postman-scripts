@@ -2,11 +2,7 @@ import { mapping } from "./lib/mapping";
 import * as _types from "./types";
 _types;
 
-if (pm.info.eventName === "afterResponse") {
-  test_after_response();
-}
-
-function test_after_response() {
+export function test_after_response() {
   const {
     name = pm.request.name,
     description,
