@@ -17,19 +17,25 @@ declare global {
   /// === custom global variables ===
   const res_code: number;
   const magic: {
+    /// general info
     name?: string;
     description?: string;
+    /// common testing over res.status codes
     res_codes: number[];
+    /// === mapping res data to postman variables ===
     res_jbody_to_env?: Mapping;
     res_jbody_to_col?: Mapping;
     res_jbody_to_globals?: Mapping;
+    /// === mapping req data to postman variables ===
     req_jbody_to_env?: Mapping;
     req_jbody_to_col?: Mapping;
     req_jbody_to_globals?: Mapping;
     req_fbody_to_env?: Mapping;
     req_fbody_to_globals?: Mapping;
     req_fbody_to_col?: Mapping;
+    /// === use extra-prefix for variables to avoid conflicts ===
     prefix?: string;
+    /// === possible prevention of running request ===
     guard?: {
       env_name_like?: RegExp | RegExp[];
     };
