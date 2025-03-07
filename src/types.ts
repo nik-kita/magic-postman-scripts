@@ -11,12 +11,12 @@ declare global {
   type MayBeOptions = { type: VarConvertType };
   type VarScopeName = "environment" | "collectionVariables" | "globals";
   type VarScope = Record<VarScopeName, {
-    get: (name: string) => string | null;
+    get: <T = string>(name: string) => T | null;
     set: (name: string, value: any, type?: VarConvertType) => void;
   }>;
   /// === custom global variables ===
   const res_code: number;
-  const magic: {
+  const magic: Record<`ctx_${VarScopeName}`, {}> & {
     /// general info
     name?: string;
     description?: string;
