@@ -50,7 +50,9 @@ function mapping(mapping, source, destination, prefix = "") {
       last.magic && (options.magic = last.magic);
     }
     let value = path.reduce((acc, p) => acc[p], source);
+    console.log(options.magic);
     if (options.magic) {
+      console.log(value);
       try {
         value = eval(options.magic)(value);
       } catch {

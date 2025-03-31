@@ -31,7 +31,9 @@ export function mapping(
 
     let value: any = path.reduce((acc, p) => acc[p], source); /// move into object/array key/index by key/index
 
+    console.log(options.magic);
     if (options.magic) {
+      console.log(value);
       try {
         value = eval(options.magic)(value); /// since we expect function declaration - <eval> will be return the function and we pass <value> as argument to it
       } catch {
