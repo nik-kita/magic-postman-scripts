@@ -17,8 +17,9 @@ declare global {
     string,
     MayBePath
   >;
-  type MayBePath = string[] | [...string[], { type: VarConvertType }];
-  type MayBeOptions = { type: VarConvertType };
+  type SetStrategy = "replace" | "propose" | "merge" | "deep-merge";
+  type MayBeOptions = { type?: VarConvertType; strategy?: SetStrategy };
+  type MayBePath = string[] | [...string[], MayBeOptions];
   type VarScopeName = "environment" | "collectionVariables" | "globals";
   type VarScope = Record<VarScopeName, {
     get: <T = string>(name: string) => T | null;
