@@ -16,17 +16,22 @@ function guard_before_query() {
   }
 }
 
-function deep_merge(a, b) {
-  const _a = a;
-  const _b = b;
-  if (Array.isArray(_a) && Array.isArray(_b)) return [..._a, ..._b];
-  if (_a && _b && typeof _a === "object" && typeof _b === "object") {
-    return Object.fromEntries(
-      (/* @__PURE__ */ new Set([...Object.keys(_a), ...Object.keys(_b)]))
-        .values(),
-    ).map((key) => [key, deep_merge(_a[key], _b[key])]);
-  }
-  return _b ?? _a;
+function deep_merge(...objects) {
+  const isObject = (obj) => obj && typeof obj === "object";
+  return objects.reduce((prev, obj) => {
+    Object.keys(obj).forEach((key) => {
+      const pVal = prev[key];
+      const oVal = obj[key];
+      if (Array.isArray(pVal) && Array.isArray(oVal)) {
+        prev[key] = pVal.concat(...oVal);
+      } else if (isObject(pVal) && isObject(oVal)) {
+        prev[key] = deep_merge(pVal, oVal);
+      } else {
+        prev[key] = oVal;
+      }
+    });
+    return prev;
+  }, {});
 }
 
 function mapping(mapping, source, destination, prefix = "") {

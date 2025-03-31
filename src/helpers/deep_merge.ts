@@ -1,11 +1,20 @@
-export function deep_merge<T>(a: T, b: T): T {
-  const _a: any = a;
-  const _b: any = b;
-  if (Array.isArray(_a) && Array.isArray(_b)) return [..._a, ..._b] as T;
-  if (_a && _b && typeof _a === "object" && typeof _b === "object") {
-    return Object.fromEntries(
-      new Set([...Object.keys(_a), ...Object.keys(_b)] as any[]).values(),
-    ).map((key: any) => [key, deep_merge(_a[key], _b[key])]) as T;
-  }
-  return _b ?? _a;
+export function deep_merge(...objects: any[]) {
+  const isObject = (obj: any) => obj && typeof obj === "object";
+
+  return objects.reduce((prev, obj) => {
+    Object.keys(obj).forEach((key) => {
+      const pVal = prev[key];
+      const oVal = obj[key];
+
+      if (Array.isArray(pVal) && Array.isArray(oVal)) {
+        prev[key] = pVal.concat(...oVal);
+      } else if (isObject(pVal) && isObject(oVal)) {
+        prev[key] = deep_merge(pVal, oVal);
+      } else {
+        prev[key] = oVal;
+      }
+    });
+
+    return prev;
+  }, {});
 }
