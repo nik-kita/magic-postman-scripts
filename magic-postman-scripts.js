@@ -19,15 +19,20 @@ function guard_before_query() {
 function mapping(mapping2, source, destination, prefix = "") {
   if (!mapping2) return;
   Object.entries(mapping2).forEach(([k, mayBePath]) => {
-    const [path, options] = Array.isArray(mayBePath[0])
-      ? [mayBePath[0], mayBePath[1]]
-      : [mayBePath, null];
+    const last = mayBePath.pop();
+    const path = mayBePath;
+    let is_string = false;
+    if (!last) return;
+    if (typeof last === "string") {
+      path.push(last);
+      is_string = true;
+    }
     let value = path.reduce((acc, p) => acc[p], source);
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
     pm[destination].set(
       prefix + k,
       value,
-      options?.type || void 0,
+      is_string ? void 0 : last.type,
     );
   });
 }

@@ -1,13 +1,23 @@
 import { expect } from "chai";
 import { Response } from "postman-collection";
 
+export const VAR_CONVERT_TYPE_all = Object.keys(
+  {
+    string: null,
+    number: null,
+    boolean: null,
+    object: null,
+    array: null,
+  } satisfies Record<VarConvertType, null>,
+) as readonly VarConvertType[];
+
 declare global {
   type VarConvertType = "string" | "boolean" | "number" | "object" | "array";
   type Mapping = Record<
     string,
     MayBePath
   >;
-  type MayBePath = string[] | [string[], { type: VarConvertType }];
+  type MayBePath = string[] | [...string[], { type: VarConvertType }];
   type MayBeOptions = { type: VarConvertType };
   type VarScopeName = "environment" | "collectionVariables" | "globals";
   type VarScope = Record<VarScopeName, {
