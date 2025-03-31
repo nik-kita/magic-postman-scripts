@@ -68,7 +68,8 @@ function mapping(mapping, source, destination, prefix = "") {
     } else if (
       options.strategy === "replace" || /// this is the exactly strategy that will be used for all another inline or-like conditions
       !prev || /// nothing to do with strategies
-      options.type !== typeof prev || /// for types mismatch between prev and new values we use default <replace> strategy
+      options.type !== typeof prev && /// for types mismatch between prev and new values we use default <replace> strategy
+        options.type === "array" && !Array.isArray(prev) ||
       !["object", "array"].includes(options.type)
     );
     else {

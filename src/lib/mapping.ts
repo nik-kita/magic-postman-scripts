@@ -55,8 +55,12 @@ export function mapping(
       /// this is the exactly strategy that will be used for all another inline or-like conditions
       !prev ||
       /// nothing to do with strategies
-      options.type !== typeof prev ||
-      /// for types mismatch between prev and new values we use default <replace> strategy
+      (
+        options.type !== typeof prev &&
+        /// for types mismatch between prev and new values we use default <replace> strategy
+        options.type === "array" && !Array.isArray(prev)
+        /// but because <array> is treated as <object> we should make this extra check
+      ) ||
       !["object", "array"].includes(options.type)
       /// <merge*> strategies are not possible for primitives and <propose> variant was already eliminated
     ) {
