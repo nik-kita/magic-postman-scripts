@@ -50,18 +50,20 @@ function mapping(mapping, source, destination, prefix = "") {
       last.magic && (options.magic = last.magic);
     }
     let value = path.reduce((acc, p) => acc[p], source);
+    console.log(options.magic);
     if (options.magic) {
+      console.log(value);
       try {
         value = eval(options.magic)(value);
       } catch {
-        console.debug("PROBLEM: unable to make magic transformation for value");
+        console.info("PROBLEM: unable to make magic transformation for value");
       }
     }
     const key = prefix + k;
     const prev = pm[destination].get(key);
     if (prev && options.strategy === "propose") {
       value = prev;
-      console.debug(
+      console.info(
         "The old value will be used. New will be ignored. Becase of <propose> strategy.",
       );
     } else if (
@@ -83,7 +85,7 @@ function mapping(mapping, source, destination, prefix = "") {
         );
       }
     }
-    console.debug(`Set ${destination}.${prefix + k} = ${value}`);
+    console.info(`Set ${destination}.${prefix + k} = ${value}`);
     pm[destination].set(
       key,
       value,
