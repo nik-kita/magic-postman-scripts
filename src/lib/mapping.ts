@@ -28,6 +28,7 @@ export function mapping(
       last.strategy && (options.strategy = last.strategy);
       last.magic && (options.magic = last.magic);
     }
+    console.log("options", options);
 
     let value: any = path.reduce((acc, p) => acc[p], source); /// move into object/array key/index by key/index
 
@@ -35,7 +36,9 @@ export function mapping(
     if (options.magic) {
       console.log(value);
       try {
-        value = eval(options.magic)(value); /// since we expect function declaration - <eval> will be return the function and we pass <value> as argument to it
+        const transform = eval(options.magic);
+        console.log(transform);
+        value = transform(value); /// since we expect function declaration - <eval> will be return the function and we pass <value> as argument to it
       } catch {
         console.info("PROBLEM: unable to make magic transformation for value");
       }

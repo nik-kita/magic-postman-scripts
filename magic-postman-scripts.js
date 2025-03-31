@@ -49,12 +49,15 @@ function mapping(mapping, source, destination, prefix = "") {
       last.strategy && (options.strategy = last.strategy);
       last.magic && (options.magic = last.magic);
     }
+    console.log("options", options);
     let value = path.reduce((acc, p) => acc[p], source);
     console.log(options.magic);
     if (options.magic) {
       console.log(value);
       try {
-        value = eval(options.magic)(value);
+        const transform = eval(options.magic);
+        console.log(transform);
+        value = transform(value);
       } catch {
         console.info("PROBLEM: unable to make magic transformation for value");
       }
