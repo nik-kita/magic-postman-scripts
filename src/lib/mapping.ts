@@ -75,7 +75,11 @@ export function mapping(
       }
     }
 
-    console.info(`Set ${destination}.${prefix + k} = ${value}`);
+    console.info(
+      `Set ${destination}.${
+        prefix + k
+      } = ${value} (as ${options.type} data-type)`,
+    );
 
     pm[destination].set(
       key,

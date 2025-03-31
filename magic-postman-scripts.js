@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function guard_before_query() {
   const env_name_like = magic.guard?.env_name_like;
@@ -22,7 +22,8 @@ function deep_merge(a, b) {
   if (Array.isArray(_a) && Array.isArray(_b)) return [..._a, ..._b];
   if (_a && _b && typeof _a === "object" && typeof _b === "object") {
     return Object.fromEntries(
-      (/* @__PURE__ */ new Set([...Object.keys(_a), ...Object.keys(_b)])).values()
+      (/* @__PURE__ */ new Set([...Object.keys(_a), ...Object.keys(_b)]))
+        .values(),
     ).map((key) => [key, deep_merge(_a[key], _b[key])]);
   }
   return _b ?? _a;
@@ -39,7 +40,7 @@ function mapping(mapping, source, destination, prefix = "") {
     const options = {
       type: "string",
       strategy: "replace",
-      magic: null
+      magic: null,
     };
     if (typeof last === "string") {
       path.push(last);
@@ -62,19 +63,24 @@ function mapping(mapping, source, destination, prefix = "") {
     if (prev && options.strategy === "propose") {
       value = prev;
       console.info(
-        "The old value will be used. New will be ignored. Becase of <propose> strategy."
+        "The old value will be used. New will be ignored. Becase of <propose> strategy.",
       );
-    } else if (options.strategy === "replace" || /// this is the exactly strategy that will be used for all another inline or-like conditions
-    !prev || /// nothing to do with strategies
-    options.type !== typeof prev || /// for types mismatch between prev and new values we use default <replace> strategy
-    !["object", "array"].includes(options.type)) ; else {
+    } else if (
+      options.strategy === "replace" || /// this is the exactly strategy that will be used for all another inline or-like conditions
+      !prev || /// nothing to do with strategies
+      options.type !== typeof prev || /// for types mismatch between prev and new values we use default <replace> strategy
+      !["object", "array"].includes(options.type)
+    );
+    else {
       if (options.strategy === "merge") {
-        value = Array.isArray(value) ? [...prev, ...value] : { ...prev, ...value };
+        value = Array.isArray(value)
+          ? [...prev, ...value]
+          : { ...prev, ...value };
       } else if (options.strategy === "deep-merge") {
         value = deep_merge(prev, value);
       } else {
         throw new Error(
-          "MAGIC_ERROR: not exhaustive condition pipe was used to check <strategy>"
+          "MAGIC_ERROR: not exhaustive condition pipe was used to check <strategy>",
         );
       }
     }
@@ -82,7 +88,7 @@ function mapping(mapping, source, destination, prefix = "") {
     pm[destination].set(
       key,
       value,
-      options.type
+      options.type,
     );
   });
 }
@@ -90,7 +96,7 @@ function mapping(mapping, source, destination, prefix = "") {
 function test_after_response() {
   const {
     name = pm.request.name,
-    description
+    description,
   } = magic;
   name && console.info(name);
   pm.test(name, () => {
@@ -105,9 +111,10 @@ function test_after_response() {
       req_fbody_to_env,
       req_fbody_to_globals,
       req_fbody_to_col,
-      prefix
+      prefix,
     } = magic;
-    const actual_res_code = pm.response.code || pm.response.transport.http?.statusCode;
+    const actual_res_code = pm.response.code ||
+      pm.response.transport.http?.statusCode;
     if (!actual_res_code) {
       console.warn("Unable to get res status code... Please open the issue");
     } else if (!res_codes.includes(actual_res_code)) {
