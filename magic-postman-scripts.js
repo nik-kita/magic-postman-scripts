@@ -1,6 +1,7 @@
 "use strict";
 
 function guard_before_query() {
+  console.log("enter <guard_before_query>");
   const env_name_like = magic.guard?.env_name_like;
   const curr = pm.environment.name;
   let ok = env_name_like ? false : true;
@@ -30,6 +31,7 @@ function deep_merge(a, b) {
 }
 
 function mapping(mapping, source, destination, prefix = "") {
+  console.log("enter <mapping> function");
   if (!mapping) return;
   Object.entries(mapping).forEach(([k, mayBePath]) => {
     const last = mayBePath.pop();
@@ -98,6 +100,7 @@ function mapping(mapping, source, destination, prefix = "") {
 }
 
 function test_after_response() {
+  console.log("enter test_after_response");
   const {
     name = pm.request.name,
     description,

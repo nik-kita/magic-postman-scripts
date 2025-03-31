@@ -3,6 +3,7 @@ import * as _types from "./types";
 _types;
 
 export function test_after_response() {
+  console.log("enter test_after_response");
   const {
     name = pm.request.name,
     description,

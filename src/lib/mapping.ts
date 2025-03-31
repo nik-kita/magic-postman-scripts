@@ -6,6 +6,7 @@ export function mapping(
   destination: VarScopeName,
   prefix = "",
 ) {
+  console.log("enter <mapping> function");
   if (!mapping) return;
   Object.entries(mapping).forEach(([k, mayBePath]) => {
     const last = mayBePath.pop(); /// possibly object with data-type clarification
