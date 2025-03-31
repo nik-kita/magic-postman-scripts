@@ -18,7 +18,16 @@ declare global {
     MayBePath
   >;
   type SetStrategy = "replace" | "propose" | "merge" | "deep-merge";
-  type MayBeOptions = { type?: VarConvertType; strategy?: SetStrategy };
+  type MayBeOptions = {
+    type?: VarConvertType;
+    strategy?: SetStrategy;
+    /**
+     * @description
+     * If used - should be the string of js function with 1 parameter.
+     * The obtained by json-like path value will be used as argument.
+     */
+    magic?: string | null;
+  };
   type MayBePath = string[] | [...string[], MayBeOptions];
   type VarScopeName = "environment" | "collectionVariables" | "globals";
   type VarScope = Record<VarScopeName, {

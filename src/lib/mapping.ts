@@ -17,6 +17,7 @@ export function mapping(
     const options: Required<MayBeOptions> = {
       type: "string",
       strategy: "replace",
+      magic: null,
     };
     if (typeof last === "string") {
       /// all items are strings - so it was only path
@@ -25,9 +26,18 @@ export function mapping(
       /// otherwise <last> is the type clarification
       last.type && (options.type = last.type);
       last.strategy && (options.strategy = last.strategy);
+      last.magic && (options.magic = last.magic);
     }
 
     let value: any = path.reduce((acc, p) => acc[p], source); /// move into object/array key/index by key/index
+
+    if (options.magic) {
+      try {
+        value = eval(options.magic)(value); /// since we expect function declaration - <eval> will be return the function and we pass <value> as argument to it
+      } catch {
+        console.debug("PROBLEM: unable to make magic transformation for value");
+      }
+    }
 
     const key = prefix + k;
     const prev = pm[destination].get<any>(key);
