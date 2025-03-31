@@ -29,9 +29,9 @@ function deep_merge(a, b) {
   return _b ?? _a;
 }
 
-function mapping(mapping2, source, destination, prefix = "") {
-  if (!mapping2) return;
-  Object.entries(mapping2).forEach(([k, mayBePath]) => {
+function mapping(mapping, source, destination, prefix = "") {
+  if (!mapping) return;
+  Object.entries(mapping).forEach(([k, mayBePath]) => {
     const last = mayBePath.pop();
     const path = mayBePath;
     if (!last) {
@@ -40,14 +40,23 @@ function mapping(mapping2, source, destination, prefix = "") {
     const options = {
       type: "string",
       strategy: "replace",
+      magic: null,
     };
     if (typeof last === "string") {
       path.push(last);
     } else {
       last.type && (options.type = last.type);
       last.strategy && (options.strategy = last.strategy);
+      last.magic && (options.magic = last.magic);
     }
     let value = path.reduce((acc, p) => acc[p], source);
+    if (options.magic) {
+      try {
+        value = eval(options.magic)(value);
+      } catch {
+        console.debug("PROBLEM: unable to make magic transformation for value");
+      }
+    }
     const key = prefix + k;
     const prev = pm[destination].get(key);
     if (prev && options.strategy === "propose") {
