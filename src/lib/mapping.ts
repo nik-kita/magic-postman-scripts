@@ -1,21 +1,34 @@
 export function mapping(
   mapping: Mapping | undefined,
-  source: any,
+  source: Record<string, any>,
   destination: VarScopeName,
   prefix = "",
 ) {
   if (!mapping) return;
   Object.entries(mapping).forEach(([k, mayBePath]) => {
-    const [path, options] = Array.isArray(mayBePath[0])
-      ? [mayBePath[0], mayBePath[1]]
-      : [mayBePath as string[], null];
+    /// possibly object with data-type clarification
+    const last = mayBePath.pop();
+    const path = mayBePath as string[];
+    let is_string = false;
+    /// nothing to do...
+    if (!last) return;
+    /// all items are strings - so it was only path
+    if (typeof last === "string") {
+      path.push(last);
+      is_string = true;
+    } else {
+      /// otherwise <last> is the type clarification
+    }
+
+    /// move into object/array key/index by key/index
     let value = path.reduce((acc, p) => acc[p], source);
+
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
 
     pm[destination].set(
       prefix + k,
       value,
-      (options as null | MayBeOptions)?.type || undefined,
+      is_string ? undefined : (last as { type: VarConvertType }).type,
     );
   });
 }
