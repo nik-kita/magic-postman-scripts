@@ -16,23 +16,69 @@ function guard_before_query() {
   }
 }
 
+function deep_merge(a, b) {
+  const _a = a;
+  const _b = b;
+  if (Array.isArray(_a) && Array.isArray(_b)) return [..._a, ..._b];
+  if (_a && _b && typeof _a === "object" && typeof _b === "object") {
+    return Object.fromEntries(
+      (/* @__PURE__ */ new Set([...Object.keys(_a), ...Object.keys(_b)]))
+        .values(),
+    ).map((key) => [key, deep_merge(_a[key], _b[key])]);
+  }
+  return _b ?? _a;
+}
+
 function mapping(mapping2, source, destination, prefix = "") {
   if (!mapping2) return;
   Object.entries(mapping2).forEach(([k, mayBePath]) => {
     const last = mayBePath.pop();
     const path = mayBePath;
-    let is_string = false;
-    if (!last) return;
+    if (!last) {
+      return;
+    }
+    const options = {
+      type: "string",
+      strategy: "replace",
+    };
     if (typeof last === "string") {
       path.push(last);
-      is_string = true;
+    } else {
+      last.type && (options.type = last.type);
+      last.strategy && (options.strategy = last.strategy);
     }
     let value = path.reduce((acc, p) => acc[p], source);
+    const key = prefix + k;
+    const prev = pm[destination].get(key);
+    if (prev && options.strategy === "propose") {
+      value = prev;
+      console.debug(
+        "The old value will be used. New will be ignored. Becase of <propose> strategy.",
+      );
+    } else if (
+      options.strategy === "replace" || /// this is the exactly strategy that will be used for all another inline or-like conditions
+      !prev || /// nothing to do with strategies
+      options.type !== typeof prev || /// for types mismatch between prev and new values we use default <replace> strategy
+      !["object", "array"].includes(options.type)
+    );
+    else {
+      if (options.strategy === "merge") {
+        value = Array.isArray(value)
+          ? [...prev, ...value]
+          : { ...prev, ...value };
+      } else if (options.strategy === "deep-merge") {
+        value = deep_merge(prev, value);
+      } else {
+        throw new Error(
+          "MAGIC_ERROR: not exhaustive condition pipe was used to check <strategy>",
+        );
+      }
+    }
     console.debug(`Set ${destination}.${prefix + k} = ${value}`);
     pm[destination].set(
-      prefix + k,
+      key,
       value,
-      is_string ? void 0 : last.type,
+      options.type,
     );
   });
 }
