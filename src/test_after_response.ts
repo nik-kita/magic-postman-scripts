@@ -9,7 +9,6 @@ export function test_after_response() {
   } = magic;
 
   name && console.info(name);
-  description && console.log(description);
 
   pm.test(name, () => {
     const {

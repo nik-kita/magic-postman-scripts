@@ -49,14 +49,10 @@ function mapping(mapping, source, destination, prefix = "") {
       last.strategy && (options.strategy = last.strategy);
       last.magic && (options.magic = last.magic);
     }
-    console.log("options", options);
     let value = path.reduce((acc, p) => acc[p], source);
-    console.log(options.magic);
     if (options.magic) {
-      console.log(value);
       try {
         const transform = eval(options.magic);
-        console.log(transform);
         value = transform(value);
       } catch {
         console.info("PROBLEM: unable to make magic transformation for value");
@@ -88,7 +84,11 @@ function mapping(mapping, source, destination, prefix = "") {
         );
       }
     }
-    console.info(`Set ${destination}.${prefix + k} = ${value}`);
+    console.info(
+      `Set ${destination}.${
+        prefix + k
+      } = ${value} (as ${options.type} data-type)`,
+    );
     pm[destination].set(
       key,
       value,
@@ -103,7 +103,6 @@ function test_after_response() {
     description,
   } = magic;
   name && console.info(name);
-  description && console.log(description);
   pm.test(name, () => {
     const {
       res_codes = [200, 201, 202, 203, 204],
