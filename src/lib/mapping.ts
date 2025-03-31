@@ -6,7 +6,6 @@ export function mapping(
   destination: VarScopeName,
   prefix = "",
 ) {
-  console.log("enter <mapping> function");
   if (!mapping) return;
   Object.entries(mapping).forEach(([k, mayBePath]) => {
     const last = mayBePath.pop(); /// possibly object with data-type clarification
@@ -29,16 +28,13 @@ export function mapping(
       last.strategy && (options.strategy = last.strategy);
       last.magic && (options.magic = last.magic);
     }
-    console.log("options", options);
 
     let value: any = path.reduce((acc, p) => acc[p], source); /// move into object/array key/index by key/index
 
-    console.log(options.magic);
     if (options.magic) {
-      console.log(value);
       try {
         const transform = eval(options.magic);
-        console.log(transform);
+
         value = transform(value); /// since we expect function declaration - <eval> will be return the function and we pass <value> as argument to it
       } catch {
         console.info("PROBLEM: unable to make magic transformation for value");

@@ -1,5 +1,4 @@
 export function guard_before_query() {
-  console.log("enter <guard_before_query>");
   const env_name_like = magic.guard?.env_name_like;
   const curr = pm.environment.name;
 
